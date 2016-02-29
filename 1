@@ -9,20 +9,25 @@ spark {
     bind-address = "0.0.0.0"
 
     # Number of job results to keep per JobResultActor/context
-    job-result-cache-size = 10000
+    job-result-cache-size = 5000
 
     jobdao = spark.jobserver.io.JobFileDAO
+
+    # Automatically load a set of jars at startup time.  Key is the appName, value is the path/URL.
+    # job-jar-paths {
+    #   test = /path/to/my/test.jar
+    # }
 
     filedao {
       rootdir = /tmp/spark-jobserver/filedao/data
     }
-    
+
     datadao {
       # storage directory for files that are uploaded to the server
       # via POST/data commands
       rootdir = /tmp/spark-jobserver/upload
     }
- 
+
     # To load up job jars on startup, place them here,
     # with the app name as the key and the path to the jar as the value
     # job-jar-paths {
@@ -54,6 +59,9 @@ spark {
         initialsize = 10
       }
     }
+
+    # The ask pattern timeout for Api
+    short-timeout = 3 s
 
     # Time out for job server to wait while creating contexts
     context-creation-timeout = 15 s
@@ -125,7 +133,7 @@ spray.can.server {
   # path to keystore
   #keystore = "/some/path/sjs.jks"
   #keystorePW = "changeit"
-  
+
   # see http://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#SSLContext for more examples
   # typical are either SSL or TLS
   encryptionType = "SSL"
@@ -135,8 +143,8 @@ spray.can.server {
   # ssl engine provider protocols
   enabledProtocols = ["SSLv3", "TLSv1"]
   idle-timeout = 60 s
-  request-timeout = 400 s
-  pipelining-limit = 4 # for maximum performance (prevents StopReading / ResumeReading messages to the IOBridge)
+  request-timeout = 40 s
+  pipelining-limit = 50 # for maximum performance (prevents StopReading / ResumeReading messages to the IOBridge)
   # Needed for HTTP/1.0 requests with missing Host headers
   default-host-header = "spray.io:8765"
 
